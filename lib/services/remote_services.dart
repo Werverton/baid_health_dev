@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:baid_health_dev/model/itens_care_plan.dart';
 import 'package:baid_health_dev/model/user.dart';
+import 'package:baid_health_dev/screens/profile/doencas_screen.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:baid_health_dev/model/doenca.dart';
@@ -84,6 +87,24 @@ class RemoteServices {
       var habitos = Habito.habitoFromJson(response.body);
 
       return habitos;
+    } else {
+      throw Exception();
+    }
+  }
+
+  static Future<String> getItensCarePlan(String token) async {
+    final response = await client.get(
+      Uri.parse('https://baid.devlivery.com.br/api/plano-cuidado'),
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.acceptHeader: "application/json",
+        HttpHeaders.authorizationHeader: "Bearer ${token}"
+      },
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+
+      return response.body;
     } else {
       throw Exception();
     }
